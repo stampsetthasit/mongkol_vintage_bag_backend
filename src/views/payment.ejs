@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MONGKOL - payment</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="/public/css/style.css" />
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous"
+        />
+        <!-- Fontawesome -->
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cousine&family=Lato&family=Mukta:wght@800&family=Rozha+One&family=Rufina:wght@700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
+          <div class="container">
+            <a class="navbar-brand" href="javascript:void(0)">MONGKOL</a>
+            <div class="collapse navbar-collapse" id="mynavbar">
+              <ul class="navbar-nav me-auto">
+                <div class="dropdown">
+                  <button class="dropbtn">SHOP</button>
+  
+                  <div class="dropdown-content">
+                    <div class="row">
+                      <div class="col-md-auto">
+                    <a href="#">Clutches</a>
+                    <a href="#">Handbags</a>
+                    <a href="#">Tote bags</a>
+                    <a href="#">Belt bags</a>
+                  </div>
+                  <div class="col">
+                    <a href="#">Crossbodybags</a>
+                    <a href="#">Shoulderbags</a>
+                    <a href="#">wallet </a>
+                    <a href="#">New Arrivals</a>
+                  </div>
+                  </div>
+                  </div>
+  
+           
+  
+                </div>
+                <div class="dropdown">
+                  <button class="dropbtn">MEN</button>
+                  <div class="dropdown-content">
+                    <div class="row">
+                      <div class="col-md-auto">
+                    <a href="#">Clutches</a>
+                    <a href="#">Handbags</a>
+                    <a href="#">Tote bags</a>
+                    <a href="#">Belt bags</a>
+                  </div>
+                  <div class="col">
+                    <a href="#">Crossbodybags</a>
+                    <a href="#">Shoulderbags</a>
+                    <a href="#">wallet </a>
+                    <a href="#">New Arrivals</a>
+                  </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="dropdown">
+                  <button class="dropbtn">WOMAN</button>
+                  <div class="dropdown-content">
+                    <div class="row">
+                      <div class="col-md-auto">
+                    <a href="#">Clutches</a>
+                    <a href="#">Handbags</a>
+                    <a href="#">Tote bags</a>
+                    <a href="#">Belt bags</a>
+                  </div>
+                  <div class="col">
+                    <a href="#">Crossbodybags</a>
+                    <a href="#">Shoulderbags</a>
+                    <a href="#">wallet </a>
+                    <a href="#">New Arrivals</a>
+                  </div>
+                  </div>
+                  </div>
+                </div>
+              </ul>
+              <form class="d-flex">
+                <input
+                  class="form-control me-2"
+                  type="text"
+                  placeholder="Search"
+                />
+                <button class="btn" type="button">
+                  <i class="fa-regular fa-magnifying-glass"></i>
+                </button>
+                <div class="vr"></div>
+                <button class="btn" type="button">
+                  <i class="fa-regular fa-heart"></i>
+                </button>
+                <button class="btn" type="button">
+                  <i class="fa-regular fa-bag-shopping"></i>
+                </button>
+                <button class="btn" type="button">
+                  <i class="fa-regular fa-user"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <div class="container text-center mt-5">
+        <h2 style="text-transform: capitalize; font-weight: bold;">payment</h2>
+        <hr style="border: 1px solid black;">
+        <div class="text-center">
+            <p style="font-size: 16px;">Please scan QR for payment <br> Order will be completed automatically once the payment has been processed</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 px-5 mb-4">
+                <div class="card align-items-center " style="border-radius: 10px; padding: 2rem;">
+                    <img class="card-img-top" src="/public/images/thai_qr_payment.png">
+                    <img class="rounded img-fluid" src="/public/icon/500x500-MONGKOL.jpg" >
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <p class="text mb-1">Amount</p>
+                            <input class="form-control mb-3" type="number" id="amount" placeholder="฿ 0.00">
+                        </div>
+
+
+                        <div class="d-grid gap-2 col-lg- mx-auto">
+                            <button disabled onclick="genQR()" id="getQR" class="btn btn-dark" type="button">GetQR</button>
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 pt-5" style="padding-right: 20rem;">
+                <div class="container-xs">
+                    <div class="d-flex flex-nowrap" style="font-size: 20px;">
+                        <div class="order-1 p-2">Time Remaining</div>
+                        <div class="order-2 p-2">
+                            <div class="d-flex">
+                                <span id="minCD" class="fw-bold text-danger">10</span>
+                                <p class="px-3">:</p>
+                                <span id="secCD" class="fw-bold text-danger">00</span>
+                            </div> 
+                        </div>
+                        <div class="order-3 p-2">Minutes</div>
+                    </div>
+                    <div class="d-flex flex-nowrap" style="font-size: 20px;">
+                        <div class="order-1 p-2">Total</div>
+                        <div class="order-2 p-2">
+                            <span id="price">10000</span>
+                        </div>
+                        <div class="order-3 p-2">฿</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="card px-4 text-center " style="width: 25rem;">
+        <img src="/public/images/thai_qr_payment.png" class="py-3">
+        <div class="row gx-3">
+            <div class="col-12 justify-content-center text-center">
+                <img id="imgQR" style="width: auto; height: 20rem;" src="">
+            </div>
+            <div class="col-12">
+                <div class="d-flex flex-column">
+                    <p class="text mb-1">Amount</p>
+                    <input class="form-control mb-3" type="number" id="amount" placeholder="฿ 0.00" value="999.99">
+                </div>
+            </div>
+            <div class="d-grid gap-2 col-3 mx-auto">
+                <button onclick="genQR()" class="btn btn-dark" type="button" id="getQR">GetQR</button>
+            </div>
+        </div>
+    </div> -->
+    <footer
+    class="text-center text-lg-start text-white mt-5 "
+    >
+
+<div class="container p-3">
+<section class="">
+  <div class="row text-dark">
+    <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-5 text-center p-lg-5">
+      <h2>
+     Contact us
+      </h2>
+    
+  </div>
+
+
+
+    <div class="d-flex" style="height: 250px; width:6vh;">
+      <div class="vr"></div>
+    </div>
+    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+
+      <div>
+        <label class="form-label">Name</label>
+        <div class="">
+          <input
+            type="text"
+            id="name"
+            class="form-control bg-light"
+            placeholder="Enter your name"
+          />
+        </div>
+      </div>
+
+      <div class="">
+        <label class="form-label mt-2">Email</label>
+        <input
+          type="email"
+          id="email"
+          class="form-control bg-light"
+          placeholder="Enter your email"
+        />
+      </div>
+
+      <div class="">
+        <label class="form-label mt-2">Message</label>
+        <textarea
+          class="form-control bg-light"
+          id="message"
+          placeholder="Enter your message"
+          rows="2"
+        ></textarea>
+      </div>
+    
+    </div>
+    <div class="col p-lg-5 mt-5">
+      <button
+      class="btn text-center btn-outline-dark  " 
+      style="border-radius: 100px; width: 10px; width: 50px;
+      height: 50px;
+      padding: 10px 16px;"
+      type="submit"
+    >
+    <i class="fa-sharp fa-solid fa-paper-plane"></i>
+    </button>
+    </div>
+    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+      <h6 class="text-uppercase mb-4 font-weight-bold">
+       Customer Service
+      </h6>
+      <p>
+        <a class ="nav-link" href="#">How to order</a>
+      </p>
+      <p>
+        <a class ="nav-link" href="#">Mongkol Membership</a>
+      </p>
+      <p>
+        <a class ="nav-link" href="#">Tracking</a>
+      </p>
+      <p>
+        <a class ="nav-link" href="#">Help</a>
+      </p>
+    </div>
+    <hr class="w-100 clearfix d-md-none" />
+    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+      <h6 class="text-uppercase mb-4 font-weight-bold">About Us</h6>
+      <p><i class="fas fa-home mr-3"></i> CONTACT PHONE: 02-1147423</p>
+      <p><i class="fas fa-envelope mr-3"></i> PHONE HOURS, MON-SUN: 10 AM - 7 PM</p>
+      <p><i class="fas fa-phone mr-3"></i>  ICTSUPPORT@MONGKOLBKK.COM</p>
+    </div>
+
+
+
+
+  </div>
+</section>
+
+<hr class="my-3">
+
+<section class="p-3 pt-0">
+  <div class="row d-flex align-items-center">
+    <div class="col-md-7 col-lg-8 text-center text-md-start text-dark">
+      <div class="p-3">
+       2022 © Mongkol
+        <a class="text-dark p-3" href="https://mdbootstrap.com/"
+           >Terms & conditions
+           </a>
+      </div>
+    </div>
+
+    <div class="col-md-5 col-lg-4 ml-lg-0 text-center text-md-end">
+      <h4>Follow Us:</h4>
+      <a
+         class="btn btn-outline-dark btn-floating m-1"
+         class="text-white"
+         role="button"
+         ><i class="fab fa-facebook-f"></i
+        ></a>
+
+      <a 
+        class="btn btn-outline-dark btn-floating m-1"
+         class="text-white"
+         role="button"
+         ><i class="fab fa-twitter"></i
+        ></a>
+
+
+      <a
+         class="btn btn-outline-dark btn-floating m-1"
+         class="text-white"
+         role="button"
+         ><i class="fab fa-google"></i
+        ></a>
+
+      <a
+         class="btn btn-outline-dark btn-floating m-1"
+         class="text-white"
+         role="button"
+         ><i class="fab fa-instagram"></i
+        ></a>
+    </div>
+
+  </div>
+</section>
+</div>
+</footer>
+</body>
+</html>

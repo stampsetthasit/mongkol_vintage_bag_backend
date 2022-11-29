@@ -1,0 +1,183 @@
+@font-face {
+  font-family: 'sukhumvit';
+  src: url(/public/font/sukhumvittadmai-text-webfont.woff2);
+}
+
+
+
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 5px #fff, 0 0 5px #fff, 0 0 5px #202020, 0 0 20px #101010, 0 0 20px #0d0c0d, 0 0 20px #090909, 0 0 20px #131213;
+  }
+  to {
+    text-shadow: 0 0 5px #fff, 0 0 50px #ffffff, 0 0 50px #fffeff, 0 0 20px #565455, 0 0 20px #565455, 0 0 20px #565455 0 0 20px #565455;
+  }
+}
+
+.container {
+  margin: 0 auto;
+  padding: 60px;
+}
+
+.input-container{
+	position:relative;
+	margin-bottom:25px;
+}
+.input-container label{
+	position:absolute;
+	top:0px;
+	left:0px;
+	font-size:16px;
+	color:#fff;	
+    pointer-event:none;
+	transition: all 0.5s ease-in-out;
+}
+.input-container input{ 
+  border:0;
+  border-bottom:1px solid #555;  
+  background: transparent;
+  width: 85%;
+  font-size:16px;
+  color:#fff;
+}
+.input-container input:focus{ 
+ border:none;	
+ outline:none;
+ border-bottom:1px solid #000000;	
+}
+.input-container input:focus ~ label,
+.input-container input:valid ~ label{
+	top:-12px;
+	font-size:12px;
+	
+}
+
+.btn-profile:hover {
+  text-decoration: underline;
+}
+
+.vl {
+  border-left: 5px solid black;
+  height: 300px;
+}
+
+@font-face {
+  font-family: 'sukhumvit';
+  src: url(/public/font/sukhumvittadmai-text-webfont.woff2);
+}
+
+
+
+
+nav {
+    height: 60px;
+    background: white;
+    display: flex;
+    filter: drop-shadow(0 0.2rem 1rem rgba(0, 0, 0, 0.4));
+}
+
+.navbar-brand{
+  font-family: 'Mukta', sans-serif;
+  
+}
+
+
+
+
+
+
+.nav-link {
+  text-transform: uppercase;
+}
+
+
+
+
+
+.container {
+  margin: 0 auto;
+  padding: 60px;
+}
+
+.dropbtn {
+
+  color: rgb(0, 0, 0);
+  background-color: #f8f9fa;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #000000;
+  min-width: 100vw;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+
+
+.dropdown-content a:hover {
+  background-color: rgb(0, 0, 0);
+  color: white;
+  animation: glow 1s ease-in-out infinite alternate;
+  
+}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.form-control {
+  background-color: #d9d9d9!important;
+  height: 3vh;
+margin-top: 1vh;
+}
+
+footer {
+  background-color: #d9d9d9;
+}
+
+h2{
+ font-family: bold;
+}
+
+h4{
+  color:black;
+  font-family: 'Mukta';
+}
+
+h3{
+  font-family: 'Mukta','italics';
+
+}
+p{
+  font-size:12px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  height: 100px;
+  width: 100px;
+  outline: black;
+  background-size: 100%, 100%;
+  border-radius: 50%;
+  border: 1px solid black;
+  color:black;
+  background-color: #000000;
+}
+
+
