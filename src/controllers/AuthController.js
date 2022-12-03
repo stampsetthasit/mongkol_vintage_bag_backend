@@ -3,7 +3,6 @@
 const firebase = require('../firebase');
 const { registerValidation } = require('../services/validation');
 const Users = require('../models/user_schema');
-const { empty } = require('@hapi/joi/lib/base');
 
 exports.register = async (req, res) => {
   const { error } = registerValidation(req.body);
@@ -21,7 +20,7 @@ exports.register = async (req, res) => {
         lastname: data.lastname,
         dob: data.dob,
         gender: data.gender,
-        address: data.address
+        address: data.address,
       }
 
       return res.status(200).json({result: 'OK', message: 'Success create account', data: {userScheama}}), 
@@ -44,9 +43,9 @@ exports.login = async (req, res) => {
       const data = await Users.findOne({
         email: req.body.email
       })
-
-      const accessToken = userdata.user.toJSON().stsTokenManager.accessToken
-      return res.status(202).header('Authorization', `Bearer ${accessToken}`).json({result: 'Accepted', message: '', data: userdata});
+      
+      const idToken = await userdata.user.getIdToken(true)
+      return res.status(202).header('Authorization', `Bearer ${idToken}`).json({result: 'Accepted', message: '', data: userdata});
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -55,7 +54,7 @@ exports.login = async (req, res) => {
     });
 };
 
-exports.resetPassword = (req, res) => {
+exports.resetPassword = async (req, res) => {
   firebase
     .auth()
     .sendPasswordResetEmail(req.body.email)
@@ -69,15 +68,35 @@ exports.resetPassword = (req, res) => {
     });
 };
 
+exports.isAdmin = async (req, res, next) => {
+  const idToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
+  mongkolGetAuth
+  .verifyIdToken(idToken)
+  .then( async (decodedToken) => {
+    const user = decodedToken.email    
+    const data = await Users.findOne({ 'email': user});
+    const roles = String(data.roles)
+    if (roles != "admin") return res.status(401).json({result: 'Unauthorized', message: "You do not have the correct administrator privileges.", data: {}})
+    
+    next()
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
+  })
+}
+
 exports.userCreds = async (req, res, next) => {
-  const accessToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
-  if (!accessToken) {
-    return res.status(403).json({ result: 'Not found', message: 'No token provied.', data: {}})
+  const idToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
+  if (!idToken) {
+    return res.status(404).json({ result: 'Not found', message: 'No token provied.', data: {}})
   }
 
-  firebase.auth().signInWithCustomToken(token)
+  mongkolGetAuth
+  .verifyIdToken(idToken)
       .then((userCredential) => {
-        const user = userCredential.user;
+        const user = userCredential;
         req.useremail = user.email;
         next();
       })
