@@ -7,11 +7,20 @@ const registerValidation = (data) => {
     lastname: Joi.string().max(128).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).max(32).required(),
+    cfpassword: Joi.any().valid(Joi.ref('password')).required().options({ language: { any: { allowOnly: 'Password does not match.' } } }),
     gender: Joi.string().min(3).max(10).required(),
     dob: Joi.date().required()
   });
   return schema.validate(data);
 };
+
+const changePwdValidation = (data) => {
+  const schema = Joi.object({
+    password: Joi.string().min(6).max(32).required(),
+    cfpassword: Joi.any().valid(Joi.ref('password')).required().options({ messages: { 'any.only': '{{#label}} does not match'} })
+  });
+  return schema.validate(data);
+}
 
 const addressValidation = (data) => {
   const schema = Joi.object({
@@ -117,7 +126,7 @@ const productValidation = (data) => {
 module.exports.registerValidation = registerValidation;
 module.exports.addressValidation = addressValidation;
 module.exports.productValidation = productValidation;
-// module.exports.loginValidation = loginValidation;
+module.exports.changePwdValidation = changePwdValidation;
 // module.exports.forgetPassValidation = forgetPassValidation;
 // module.exports.verifyValidation = verifyValidation;
 // module.exports.transactionValidation = transactionValidation;

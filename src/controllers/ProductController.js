@@ -1,4 +1,3 @@
-const { date } = require('@hapi/joi');
 const Users = require('../models/user_schema');
 const Products = require('../models/product_schema');
 const { productValidation } = require('../services/validation');
@@ -30,7 +29,7 @@ exports.getAllProduct = async (req, res) => {
         res.status(200).json({result: 'OK', message: 'success get all product', data: product_data});
     }
     catch (error) {
-        res.status(500).json({result: 'Internal Server Error', message: '', error: {error}});
+        res.status(500).json({result: 'Internal Server Error', message: '', error: error});
     }
 }
 
@@ -58,11 +57,11 @@ exports.editProduct = async (req, res) => {
     const id = req.body.productID //undefined
 
     const { error } = productValidation(req.body);
-    if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data:{}});
+    if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data: {}});
 
     try {
         const data = await Products.findById(id)
-        if(!data) return res.status(404).json({result: 'Not found', message: '', data: {data}});
+        if(!data) return res.status(404).json({result: 'Not found', message: '', data: data});
 
         const { title, category, price, desc, image} = req.body
         data.title = title
@@ -83,7 +82,7 @@ exports.editProduct = async (req, res) => {
         return res.status(200).json({result: 'OK', message: 'success update address', data: schema});
     }
     catch (error) {
-        res.status(500).json({result: 'Internal Server Error', message: '', error: {error}});
+        res.status(500).json({result: 'Internal Server Error', message: '', error: error});
     }
 }
 
@@ -92,7 +91,7 @@ exports.deleteProduct = async (req, res) => {
     
     try {
         const data = await Products.findById(id)
-        if(!data) return res.status(404).json({result: 'Not found', message: '', data: {data}});
+        if(!data) return res.status(404).json({result: 'Not found', message: '', data: data});
 
         await Products.findByIdAndDelete(id, data)
         const schema = {
@@ -106,6 +105,6 @@ exports.deleteProduct = async (req, res) => {
         return res.status(200).json({result: 'OK', message: 'success delete product', data: {id, schema}});
     }
     catch (error) {
-        res.status(500).json({result: 'Internal Server Error', message: '', error: {error}});
+        res.status(500).json({result: 'Internal Server Error', message: '', error: error});
     }
 }

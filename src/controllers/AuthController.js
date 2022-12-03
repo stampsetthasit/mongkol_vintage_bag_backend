@@ -1,9 +1,6 @@
-// const Users = require('../models/user_schema');
-// const { provider } = require('@hapi/joi/lib/cache');
 const firebase = require('../firebase');
-const { registerValidation } = require('../services/validation');
+const { registerValidation,  changePwdValidation} = require('../services/validation');
 const Users = require('../models/user_schema');
-const { empty } = require('@hapi/joi/lib/base');
 
 exports.register = async (req, res) => {
   const { error } = registerValidation(req.body);
@@ -55,6 +52,21 @@ exports.login = async (req, res) => {
     });
 };
 
+exports.changePassword = async (req, res) => {
+  const { error } = changePwdValidation(req.body);
+  if (error) return res.status(200).json({result: 'OK', message: error.details[0].message, data: {}});
+
+  firebase.auth().currentUser.updatePassword(req.body.password).then(async(data) => {
+    res.status(200).json({result: 'OK', message: "Success update password", data: newpwd})
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
+  });
+
+}
+
 exports.resetPassword = (req, res) => {
   firebase
     .auth()
@@ -69,22 +81,40 @@ exports.resetPassword = (req, res) => {
     });
 };
 
+exports.isAdmin = async (req, res, next) => {
+  const idToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
+  mongkolGetAuth
+  .verifyIdToken(idToken)
+  .then( async (decodedToken) => {
+    const user = decodedToken.email    
+    const data = await Users.findOne({ 'email': user});
+    const roles = String(data.roles)
+    if (roles != "admin") return res.status(401).json({result: 'Unauthorized', message: "You do not have the correct administrator privileges.", data: {}})
+
+    next()
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
+  })
+}
+
 exports.userCreds = async (req, res, next) => {
-  const accessToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
-  if (!accessToken) {
-    return res.status(403).json({ result: 'Not found', message: 'No token provied.', data: {}})
+  const idToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
+  if (!idToken) {
+    return res.status(404).json({ result: 'Not found', message: 'No token provied.', data: {}})
   }
 
-  firebase.auth().signInWithCustomToken(token)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        req.useremail = user.email;
-        next();
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
-      });
+  mongkolGetAuth.verifyIdToken(idToken).then((userCredential) => {
+    const user = userCredential
+    req.useremail = user.email;
+    next();
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
+  });
 }
 
