@@ -4,7 +4,7 @@ const { userCreds } = require('../controllers/AuthController');
 
 const UserController = require('../controllers/UserController');
 
-// router.patch('/updateAddress', userCreds, UserController.updateAddress);
-router.patch('/updateAddress', UserController.updateAddress);
+router.patch('/updateAddress', userCreds, UserController.updateAddress);
+router.patch('/updatePoint', userCreds, UserController.updatePoint);
 
 module.exports = router;

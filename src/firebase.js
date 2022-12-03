@@ -1,6 +1,9 @@
 const firebase = require("firebase/app");
 require("firebase/auth");
 require("firebase/firestore");
+const { initializeApp } = require("firebase-admin/app")
+const { getAuth } = require('firebase-admin/auth');
+
 
 // Add Firebase SDK Snippet
 const firebaseConfig = {
@@ -15,6 +18,9 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+const mongkolFirebaseAdminApp = initializeApp(firebaseConfig)
+const mongkolGetAuth = getAuth(mongkolFirebaseAdminApp);
+global.mongkolGetAuth = mongkolGetAuth;
 
 
 module.exports = firebase;

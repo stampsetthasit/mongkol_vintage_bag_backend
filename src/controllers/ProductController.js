@@ -27,7 +27,7 @@ exports.getAllProduct = async (req, res) => {
             product_data.push(schema)
         }
 
-        res.status(200).json({result: 'OK', message: 'success get all product', data: {data: product_data}});
+        res.status(200).json({result: 'OK', message: 'success get all product', data: product_data});
     }
     catch (error) {
         res.status(500).json({result: 'Internal Server Error', message: '', error: {error}});
@@ -62,7 +62,6 @@ exports.editProduct = async (req, res) => {
 
     try {
         const data = await Products.findById(id)
-        console.log(id)
         if(!data) return res.status(404).json({result: 'Not found', message: '', data: {data}});
 
         const { title, category, price, desc, image} = req.body
@@ -81,7 +80,7 @@ exports.editProduct = async (req, res) => {
             image: data.image,
             modified: data.modified
         }
-        return res.status(200).json({result: 'OK', message: 'success update address', data: {data: schema}});
+        return res.status(200).json({result: 'OK', message: 'success update address', data: schema});
     }
     catch (error) {
         res.status(500).json({result: 'Internal Server Error', message: '', error: {error}});
@@ -93,7 +92,6 @@ exports.deleteProduct = async (req, res) => {
     
     try {
         const data = await Products.findById(id)
-        console.log(id)
         if(!data) return res.status(404).json({result: 'Not found', message: '', data: {data}});
 
         await Products.findByIdAndDelete(id, data)
@@ -103,7 +101,6 @@ exports.deleteProduct = async (req, res) => {
             price: data.price,
             desc: data.desc,
             image: data.image,
-            modified: data.modified
         }
 
         return res.status(200).json({result: 'OK', message: 'success delete product', data: {id, schema}});

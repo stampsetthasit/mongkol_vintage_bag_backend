@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { userCreds } = require('../controllers/AuthController');
+const { userCreds, isAdmin } = require('../controllers/AuthController');
 
 const ProductController = require('../controllers/ProductController');
 
-router.get('/allproduct', ProductController.getAllProduct);
+router.get('/allproduct', userCreds, ProductController.getAllProduct);
 
-router.post('/addProduct', ProductController.addProduct);
+router.post('/addProduct', userCreds, isAdmin, ProductController.addProduct);
 
-router.patch('/editProduct', ProductController.editProduct);
+router.patch('/editProduct', userCreds, isAdmin, ProductController.editProduct);
 
-router.delete('/deleteProduct', ProductController.deleteProduct);
+router.delete('/deleteProduct', userCreds, isAdmin, ProductController.deleteProduct);
 
 module.exports = router;

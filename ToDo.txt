@@ -1,0 +1,12 @@
+// To Do
+IMPORTANT
+- Change password
+- Coupon discount
+- Files Upload
+- Wishlist
+- Payment
+
+
+DONT GIVE A FUCK
+- Google Login
+- Send mail contact us FOOTER

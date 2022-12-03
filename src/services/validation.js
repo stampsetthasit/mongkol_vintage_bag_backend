@@ -37,6 +37,7 @@ const addressValidation = (data) => {
 // };
 const productValidation = (data) => {
   const schema = Joi.object({
+    email: Joi.string(),
     productID: Joi.string(),
     title: Joi.string().max(60).required(),
     category: Joi.string().max(60).required(),
