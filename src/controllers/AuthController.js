@@ -18,7 +18,8 @@ exports.register = async (req, res) => {
         lastname: data.lastname,
         dob: data.dob,
         gender: data.gender,
-        address: data.address
+        address: data.address,
+        wishlist: data.wishlist
       }
 
       return res.status(200).json({result: 'OK', message: 'Success create account', data: {userScheama}}), 
@@ -118,3 +119,16 @@ exports.userCreds = async (req, res, next) => {
   });
 }
 
+exports.getUserEmail = async (req, res) => {
+  const idToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
+  mongkolGetAuth.verifyIdToken(idToken).then((userCredential) => {
+    const user = userCredential
+    req.useremail = user.email;
+    console.log(user.email)
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
+  });
+}

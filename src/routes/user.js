@@ -6,5 +6,6 @@ const UserController = require('../controllers/UserController');
 
 router.patch('/updateAddress', userCreds, UserController.updateAddress);
 router.patch('/updatePoint', userCreds, UserController.updatePoint);
+router.put('/addWishlist', userCreds, UserController.addWishlist);
 
 module.exports = router;

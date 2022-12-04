@@ -20,4 +20,8 @@ const pointCal = (priceTotal) => {
 
 };
 
+const getUsersEmail = (data) => {
+    
+}
+
 exports.pointCal = pointCal;
