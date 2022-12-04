@@ -53,12 +53,29 @@ exports.login = async (req, res) => {
     });
 };
 
+exports.logout = async (req, res) => {
+  firebase.auth().signOut().then((user) => {
+    res.status(200).json({result: 'OK', message: "Success logout", data: user})
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
+  });
+}
+
 exports.changePassword = async (req, res) => {
   const { error } = changePwdValidation(req.body);
   if (error) return res.status(200).json({result: 'OK', message: error.details[0].message, data: {}});
 
-  firebase.auth().currentUser.updatePassword(req.body.password).then(async(data) => {
-    res.status(200).json({result: 'OK', message: "Success update password", data: newpwd})
+  const password = req.body
+
+  firebase
+  .auth()
+  .currentUser
+  .updatePassword(password)
+  .then(async (data) => {
+    res.status(200).json({result: 'OK', message: "Success update password", data: data})
   })
   .catch((error) => {
     const errorCode = error.code;
@@ -119,16 +136,15 @@ exports.userCreds = async (req, res, next) => {
   });
 }
 
-exports.getUserEmail = async (req, res) => {
-  const idToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
-  mongkolGetAuth.verifyIdToken(idToken).then((userCredential) => {
-    const user = userCredential
-    req.useremail = user.email;
-    console.log(user.email)
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
-  });
-}
+// exports.getUserEmail = async (req, res) => {
+//   const idToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
+//   mongkolGetAuth.verifyIdToken(idToken).then((userCredential) => {
+//     const user = userCredential
+//     req.useremail = user.email;
+//   })
+//   .catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//     return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
+//   });
+// }
