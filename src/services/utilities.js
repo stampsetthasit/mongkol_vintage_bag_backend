@@ -20,8 +20,41 @@ const pointCal = (priceTotal) => {
 
 };
 
-const getUsersEmail = (data) => {
+const couponDis = (point, priceTotal, couponSelected) => {
+    const userPoint = point;
+    const total = priceTotal;
+
+    const selected = couponSelected
+
+    var balancePoint = 0
+    var calTotal = 0
+
+    balancePoint = 0
+    calTotal = 0
+
     
+    if (point >= 400 && selected == 1) {
+        return  {'point': balancePoint = userPoint-400, 'total': calTotal = total-200}
+    }
+    else if (point >= 950 && selected == 2) {
+        return  {'point': balancePoint = userPoint-950, 'total': calTotal = total-500}
+    }
+    else if (point >= 1300 && selected == 3) {
+        return  {'point': balancePoint = userPoint-1300, 'total': calTotal = total-800}
+    }
+    else if (point >= 1800 && selected == 4) {
+        return  {'point': balancePoint = userPoint-1800, 'total': calTotal = total-1000}
+    }
+    else if (point >= 3950 && selected == 5) {
+        return  {'point': balancePoint = userPoint-3950, 'total': calTotal = total-2500}
+    }
+    else if (point >= 6500 && selected == 6) {
+        return  {'point': balancePoint = userPoint-6500, 'total': calTotal = total-5000}
+    }
+    else {
+        return "Not reaching minimum point."
+    }
 }
 
 exports.pointCal = pointCal;
+exports.couponDis = couponDis;

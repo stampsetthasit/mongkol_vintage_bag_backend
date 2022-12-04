@@ -64,17 +64,14 @@ exports.logout = async (req, res) => {
   });
 }
 
-exports.changePassword = async (req, res) => {
+exports.changePassword = async (req, res) => { //NOT DONE
   const { error } = changePwdValidation(req.body);
   if (error) return res.status(200).json({result: 'OK', message: error.details[0].message, data: {}});
 
   const password = req.body
 
-  firebase
-  .auth()
-  .currentUser
-  .updatePassword(password)
-  .then(async (data) => {
+  firebase.auth().currentUser.updatePassword(password).then(async (data) => {
+    console.log("UPDATED PASSWORD")
     res.status(200).json({result: 'OK', message: "Success update password", data: data})
   })
   .catch((error) => {

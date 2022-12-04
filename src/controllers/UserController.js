@@ -1,7 +1,7 @@
 const Users = require('../models/user_schema');
 const Products = require('../models/product_schema');
 const { addressValidation, wishlistValidation } = require('../services/validation');
-const { pointCal } = require('../services/utilities')
+const { pointCal, couponDis } = require('../services/utilities')
 
 exports.updateAddress = async (req, res) => {
     const { error } = addressValidation(req.body);
@@ -78,8 +78,6 @@ exports.addWishlist = async (req, res) => {
         const data = await Products.findById(productID)
         if(!data) return res.status(404).json({result: 'Not found', message: '', data: data});
 
-        console.log(data.productID)
-
         const updateWishlistItems = user_data.wishlist.items ? [...user_data.wishlist.items] : [];
         updateWishlistItems.push({
             _id: productID,
@@ -127,3 +125,33 @@ exports.removeWishlist = async (req, res) => {
 
 }
 
+exports.coupon = async (req, res) => {
+    const useremail = req.headers.email
+    const priceTotal = req.body.priceTotal
+    const selected = req.body.coupon
+
+    const data = await Users.findOne({ 'email': useremail })
+    if(!data) return res.status(404).json({result: 'Not found', message: '', data: data});
+
+    const point = data.point
+
+    const discount = couponDis(point, priceTotal, selected)
+
+    try {
+
+        data.point = discount.point
+        data.modified = Date.now()
+
+        await Users.findOneAndUpdate(useremail, data)
+        const schema = {
+            email: data.email,
+            point: data.point,
+            modified: data.modified,
+            newPriceTotal: discount.total
+        }
+        return res.status(200).json({result: 'OK', message: 'success redeem coupon', data: schema});
+    }
+    catch (error) {
+        res.status(500).json({result: 'Internal Server Error', message: '', error: error});
+    }
+}

@@ -108,3 +108,4 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).json({result: 'Internal Server Error', message: '', error: error});
     }
 }
+
