@@ -78,9 +78,11 @@ exports.addWishlist = async (req, res) => {
         const data = await Products.findById(productID)
         if(!data) return res.status(404).json({result: 'Not found', message: '', data: data});
 
+        console.log(data.productID)
+
         const updateWishlistItems = user_data.wishlist.items ? [...user_data.wishlist.items] : [];
         updateWishlistItems.push({
-            id: user_data.productID,
+            _id: productID,
             modified: Date.now()
         });
 
@@ -94,5 +96,34 @@ exports.addWishlist = async (req, res) => {
     catch (error) {
         res.status(500).json({result: 'Internal Server Error', message: '', error: error});
     }
+}
+
+exports.removeWishlist = async (req, res) => {
+    const useremail = req.headers.email
+    const productID = req.body.productID
+
+    const { error } = wishlistValidation(req.body);
+    if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data: {}});
+
+    try {
+        const user_data = await Users.findOneAndUpdate({'email': useremail})
+        if(!user_data) return res.status(404).json({result: 'Not found', message: '', data: user_data});
+
+        const data = await Products.findById(productID)
+        if(!data) return res.status(404).json({result: 'Not found', message: '', data: data});
+
+        const updateWishlistItems = user_data.wishlist.items.filter(item => item._id.toString() != productID.toString());
+
+        user_data.wishlist.items = updateWishlistItems;
+
+        user_data.save();
+
+        return res.status(200).json({result: 'OK', message: 'success remove wishlist', data: updateWishlistItems});
+
+    }
+    catch (error) {
+        res.status(500).json({result: 'Internal Server Error', message: '', error: error});
+    }
+
 }
 
