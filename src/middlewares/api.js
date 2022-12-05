@@ -7,6 +7,7 @@ router.use('/user', require('../routes/user'));
 router.use('/admin', require('../routes/admin'));
 router.use('/product', require('../routes/product'));
 router.use('/file', require('../routes/file'));
+router.use('/order', require('../routes/order'));
 // router.use('/transaction', require('../routes/transaction'));
 
 module.exports = router;

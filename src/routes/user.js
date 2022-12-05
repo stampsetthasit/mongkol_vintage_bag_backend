@@ -7,8 +7,8 @@ const UserController = require('../controllers/UserController');
 router.patch('/updateAddress', userCreds, UserController.updateAddress);
 router.patch('/updatePoint', userCreds, UserController.updatePoint);
 
-router.put('/addWishlist', userCreds, UserController.addWishlist);
-router.patch('/removeWishlist', userCreds, UserController.removeWishlist);
+router.put('/addWishlistItem', userCreds, UserController.addWishlistItem);
+router.patch('/deleteWishlistItem', userCreds, UserController.deleteWishlistItem);
 
 router.patch('/redeemcoupon', userCreds, UserController.coupon);
 

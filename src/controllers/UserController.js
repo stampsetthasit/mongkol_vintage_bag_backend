@@ -63,7 +63,7 @@ exports.updatePoint = async (req, res) => {
 
 }
 
-exports.addWishlist = async (req, res) => {
+exports.addWishlistItem = async (req, res) => {
 
     const useremail = req.headers.email
     const productID = req.body.productID //.headers undefined
@@ -96,7 +96,7 @@ exports.addWishlist = async (req, res) => {
     }
 }
 
-exports.removeWishlist = async (req, res) => {
+exports.deleteWishlistItem = async (req, res) => {
     const useremail = req.headers.email
     const productID = req.body.productID
 

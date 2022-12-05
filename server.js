@@ -6,8 +6,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/images", express.static(path.join(__dirname, '/public/images')));
-app.use("/css", express.static(path.join(__dirname, '/public/css')));
+app.use("/public/images", express.static(path.join(__dirname, '/public/images')));
 app.use('/api', require('./src/middlewares/api'));
 
 const host = 'localhost';
