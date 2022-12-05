@@ -7,7 +7,7 @@ exports.updateAddress = async (req, res) => {
     const { error } = addressValidation(req.body);
     if (error) return res.status(200).json({result: 'OK', message: error.details[0].message, data: {}});
 
-    const useremail = req.headers.email
+    const useremail = req.useremail
 
     try {
         const data = await Users.findOne({ 'email': useremail })
@@ -37,7 +37,7 @@ exports.updateAddress = async (req, res) => {
 
 exports.updatePoint = async (req, res) => {
 
-    const useremail = req.headers.email
+    const useremail = req.useremail
     const priceTotal = req.body.priceTotal
     const point = pointCal(priceTotal)
 
@@ -65,7 +65,7 @@ exports.updatePoint = async (req, res) => {
 
 exports.addWishlistItem = async (req, res) => {
 
-    const useremail = req.headers.email
+    const useremail = req.useremail
     const productID = req.body.productID //.headers undefined
 
     const { error } = wishlistValidation(req.body);
@@ -97,7 +97,7 @@ exports.addWishlistItem = async (req, res) => {
 }
 
 exports.deleteWishlistItem = async (req, res) => {
-    const useremail = req.headers.email
+    const useremail = req.useremail
     const productID = req.body.productID
 
     const { error } = wishlistValidation(req.body);

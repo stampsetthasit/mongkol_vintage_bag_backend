@@ -98,6 +98,7 @@ exports.resetPassword = (req, res) => {
 
 exports.isAdmin = async (req, res, next) => {
   const idToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
+  
   mongkolGetAuth
   .verifyIdToken(idToken)
   .then( async (decodedToken) => {

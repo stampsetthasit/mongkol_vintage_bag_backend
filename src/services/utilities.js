@@ -1,3 +1,5 @@
+const nodemailer = require('nodemailer');
+
 const pointCal = (priceTotal) => {
     let total = priceTotal;
     var point = 0
@@ -56,5 +58,33 @@ const couponDis = (point, priceTotal, couponSelected) => {
     }
 }
 
+const mailer = (to, subject, html) => {
+    let transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: 'mongkolteam.info@gmail.com',
+          pass: 'oqqwhggsctjovgwe'
+        },
+    });
+
+    let mailOptions = {
+        from: 'mongkolteam.info@gmail.com',
+        to: to,
+        subject: `Order confirmation ${subject}`,
+        html: html
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error.message);
+        }
+        console.log(`success send email`)
+    });
+};
+
+
 exports.pointCal = pointCal;
 exports.couponDis = couponDis;
+exports.mailer = mailer;

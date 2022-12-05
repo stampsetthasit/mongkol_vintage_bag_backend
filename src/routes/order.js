@@ -5,7 +5,7 @@ const OrderController = require('../controllers/OrderController');
 
 router.get('/checkout', userCreds, OrderController.checkout);
 
-router.patch('/checkout/success', userCreds, OrderController.checkoutComplete);
+router.patch('/checkout/success', userCreds, OrderController.checkoutComplete, OrderController.sendMail);
 
 // router.get('/orders', userCreds,);
 

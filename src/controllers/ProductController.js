@@ -4,7 +4,7 @@ const { productValidation } = require('../services/validation');
 
 exports.getAllProduct = async (req, res) => {
 
-    const useremail = req.headers.email
+    const useremail = req.useremail
 
     try {
         const user_data = await Users.findOne({ 'email': useremail })
@@ -34,7 +34,7 @@ exports.getAllProduct = async (req, res) => {
 }
 
 exports.addProduct = async (req, res) => {   //+ img
-    const useremail = req.headers.email
+    const useremail = req.useremail
 
     const { error } = productValidation(req.body);
     if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data:{}});

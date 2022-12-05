@@ -1,12 +1,15 @@
 const Users = require('../models/user_schema');
-const Products = require('../models/product_schema');
+const Products = require('../models/product_schema')
+const firebase = require('../firebase');
 const Orders = require('../models/order_schema');
 const generatePayload = require("promptpay-qr");
-const QRCode = require('qrcode') 
+const QRCode = require('qrcode'); 
+
+const { mailer } = require('../services/utilities')
 
 exports.checkout = async (req, res, next) => {
     let userProducts, total = 0;
-    const useremail = req.headers.email
+    const useremail = req.useremail
     const productID = req.body.productID
     const priceTotal = req.body.priceTotal
 
@@ -46,7 +49,7 @@ exports.checkout = async (req, res, next) => {
 };
 
 exports.checkoutComplete = async (req, res, next) => {
-    const useremail = req.headers.email
+    const useremail = req.useremail
     const productID = req.body.productID
     
     try {
@@ -70,12 +73,61 @@ exports.checkoutComplete = async (req, res, next) => {
             products: products
         });
 
-        order.save();
-
+        const data = {orderID: order._id, firstname: order.user.firstname}
+        req.data = data
         next()
-        res.status(200).json({result: 'OK', message: '', data: order.user});
     }
     catch (error) {
         res.status(500).json({result: 'Internal Server Error', message: '', error: error});
     }
 }
+
+exports.sendMail = async (req, res) => {
+    const useremail = req.useremail
+    const {orderID, firstname } = req.data
+
+    mailer(useremail, String(orderID), 
+    `<p>Dear ${firstname},</p>
+    <br>
+    <p>Thank you so much for order with Mongkol!</p>
+    <br>
+    <p>Your order is being prepared and packed with loving care. By the way, you have great taste.</p>
+    <br>
+    <p>Let us know if we can do anything to make your experience better!</p>
+    <br>
+    <p>Thanks again,</p>
+    <p>Mongkol</p>
+    `)
+
+    firebase.firestore().collection("mail").doc(String(orderID)).set({
+        to: useremail,
+        message: {
+            subject: `Order confirmation #${String(orderID)}`,
+            html: `
+            <p>Dear ${firstname},</p>
+            <br>
+            <p>Thank you so much for order with Mongkol!</p>
+            <br>
+            <p>Your order is being prepared and packed with loving care. By the way, you have great taste.</p>
+            <br>
+            <p>Let us know if we can do anything to make your experience better!</p>
+            <br>
+            <p>Thanks again,</p>
+            <p>Mongkol</p>
+            `
+        },
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    res.status(200).json({result: 'OK', message: 'payment complete and also send email', data: {}});
+}
+
+// Dear sam,
+
+// Thank you so much for order with Mongkol!
+
+// Your order is being prepared and packed with loving care. By the way, you have great taste.
+
+// Let us know if we can do anything to make your experience better!
+
+// Thanks again,
+// Mongkol
