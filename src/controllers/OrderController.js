@@ -45,7 +45,7 @@ exports.checkout = async (req, res, next) => {
 
 };
 
-exports.checkoutComplete = async (req, res) => {
+exports.checkoutComplete = async (req, res, next) => {
     const useremail = req.headers.email
     const productID = req.body.productID
     
@@ -72,6 +72,7 @@ exports.checkoutComplete = async (req, res) => {
 
         order.save();
 
+        next()
         res.status(200).json({result: 'OK', message: '', data: order.user});
     }
     catch (error) {
