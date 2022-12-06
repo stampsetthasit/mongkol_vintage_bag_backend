@@ -1,7 +1,8 @@
 const Users = require('../models/user_schema');
 const Products = require('../models/product_schema');
+const firebase = require('../firebase');
 const { addressValidation, wishlistValidation } = require('../services/validation');
-const { pointCal, couponDis } = require('../services/utilities')
+const { pointCal, couponDis, mailer } = require('../services/utilities')
 
 exports.updateAddress = async (req, res) => {
     const { error } = addressValidation(req.body);
@@ -154,4 +155,27 @@ exports.coupon = async (req, res) => {
     catch (error) {
         res.status(500).json({result: 'Internal Server Error', message: '', error: error});
     }
+}
+
+exports.contactus = async (req, res) => {
+    const userEmail = req.body.email
+    const userName = req.body.name
+    const userMsg = req.body.msg
+
+    try {
+
+        mailer('mongkolteam.info@gmail.com', `Contact us from ${userEmail}`, `<h5>Name: ${userName} <br> Email: ${userEmail} <br></h5><p>Message: ${userMsg}</p>`);
+
+        firebase.firestore().collection("contact-us").add({
+            name: userName,
+            email: userEmail,
+            message: userMsg,
+            created_at: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        res.status(200).json({result: 'OK', message: 'Success send contact us', data: {}});
+    }
+    catch (error) {
+        res.status(500).json({result: 'Internal Server Error', message: '', error: error});
+    }
+
 }

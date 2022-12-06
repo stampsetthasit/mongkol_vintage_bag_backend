@@ -72,7 +72,7 @@ const mailer = (to, subject, html) => {
     let mailOptions = {
         from: 'mongkolteam.info@gmail.com',
         to: to,
-        subject: `Order confirmation ${subject}`,
+        subject: `${subject}`,
         html: html
     };
 

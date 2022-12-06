@@ -9,7 +9,7 @@ router.post('/logout', userCreds, AuthController.logout);
 
 // router.post('/google-login', AuthController.googleLogin);
 
-router.post('/changepassword', userCreds, AuthController.changePassword);
+// router.post('/changepassword', userCreds, AuthController.changePassword);
 router.post('/forgotpassword', AuthController.resetPassword);
 
 module.exports = router;

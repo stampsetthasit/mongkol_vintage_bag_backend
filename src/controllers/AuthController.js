@@ -64,23 +64,31 @@ exports.logout = async (req, res) => {
   });
 }
 
-exports.changePassword = async (req, res) => { //NOT DONE
-  const { error } = changePwdValidation(req.body);
-  if (error) return res.status(200).json({result: 'OK', message: error.details[0].message, data: {}});
+// exports.changePassword = async (req, res) => { //NOT DONE
+//   const { error } = changePwdValidation(req.body);
+//   if (error) return res.status(200).json({result: 'OK', message: error.details[0].message, data: {}});
 
-  const password = req.body
+//   const useremail = req.useremail
 
-  firebase.auth().currentUser.updatePassword(password).then(async (data) => {
-    console.log("UPDATED PASSWORD")
-    res.status(200).json({result: 'OK', message: "Success update password", data: data})
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
-  });
+//   const password = req.body
 
-}
+//   // firebase.auth().currentUser.updatePassword(password).then(async (data) => {
+//   //   console.log("UPDATED PASSWORD")
+//   //   res.status(200).json({result: 'OK', message: "Success update password", data: data})
+//   // })
+//   // firebase.auth().onAuthStateChanged(async (user) => {
+//   //   if (user) {
+//   //     const uid = user.email
+//   //     console.log(uid)
+//   //     res.status(200).json({result: 'OK', message: "Success update password", data: uid})
+//   //   }
+//   // })
+//   // .catch((error) => {
+//   //   const errorCode = error.code;
+//   //   const errorMessage = error.message;
+//   //   return res.status(500).json({result: 'Internal Server Error', message: errorMessage, errorCode: errorCode});
+//   // });
+// }
 
 exports.resetPassword = (req, res) => {
   firebase
@@ -98,12 +106,12 @@ exports.resetPassword = (req, res) => {
 
 exports.isAdmin = async (req, res, next) => {
   const idToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
-  
+
   mongkolGetAuth
   .verifyIdToken(idToken)
   .then( async (decodedToken) => {
-    const user = decodedToken.email    
-    const data = await Users.findOne({ 'email': user});
+    const user = decodedToken.email
+    const data = await Users.findOne({'email': user});
     const roles = String(data.roles)
     if (roles != "admin") return res.status(401).json({result: 'Unauthorized', message: "You do not have the correct administrator privileges.", data: {}})
 

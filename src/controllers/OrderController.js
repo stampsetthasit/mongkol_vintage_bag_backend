@@ -86,7 +86,7 @@ exports.sendMail = async (req, res) => {
     const useremail = req.useremail
     const {orderID, firstname } = req.data
 
-    mailer(useremail, String(orderID), 
+    mailer(useremail, `Order confirmation ${String(orderID)}`, 
     `<p>Dear ${firstname},</p>
     <br>
     <p>Thank you so much for order with Mongkol!</p>

@@ -33,7 +33,7 @@ exports.getAllProduct = async (req, res) => {
     }
 }
 
-exports.addProduct = async (req, res) => {   //+ img
+exports.addProduct = async (req, res) => {  
     const useremail = req.useremail
 
     const { error } = productValidation(req.body);

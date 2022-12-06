@@ -12,4 +12,6 @@ router.patch('/deleteWishlistItem', userCreds, UserController.deleteWishlistItem
 
 router.patch('/redeemcoupon', userCreds, UserController.coupon);
 
+router.post('/contactus', UserController.contactus);
+
 module.exports = router;

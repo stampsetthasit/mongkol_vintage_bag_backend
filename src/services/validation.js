@@ -34,16 +34,14 @@ const addressValidation = (data) => {
   return schema.validate(data);
 };
 
-// const productValidation = (data) => {
-//   const schema = Joi.object({
-//     title: Joi.string().max(60).required(),
-//     category: Joi.string().max(60).required(),
-//     price: Joi.number().max(9999999).required(),
-//     desc: Joi.string().max(300).required(),
-//     image: Joi.string().required(),
-//   });
-//   return schema.validate(data);
-// };
+const contactUsValidation = (data) => {
+  const schema = Joi.object({
+    name: Joi.string().min(2).required(),
+    email: Joi.string().email().required(),
+    msg: Joi.string().min(10).required
+  })
+}
+
 const productValidation = (data) => {
   const schema = Joi.object({
     email: Joi.string(),
