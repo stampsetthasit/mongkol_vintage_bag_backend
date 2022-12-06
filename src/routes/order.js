@@ -3,9 +3,9 @@ const router = express.Router();
 const { userCreds } = require('../controllers/AuthController');
 const OrderController = require('../controllers/OrderController');
 
-router.get('/checkout', userCreds, OrderController.checkout);
+router.patch('/checkout', userCreds, OrderController.checkout, OrderController.checkoutComplete,OrderController.sendMail);
 
-router.patch('/checkout/success', userCreds, OrderController.checkoutComplete, OrderController.sendMail);
+// router.patch('/checkout/success', userCreds, );
 
 // router.get('/orders', userCreds,);
 

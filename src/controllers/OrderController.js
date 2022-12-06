@@ -25,7 +25,7 @@ exports.checkout = async (req, res, next) => {
         if(address.address.mobile === "") return res.status(404).json({result: 'Not found', message: 'mobile not found', data: address.address});
 
         const data = await Products.findById(productID)
-        if(!data) return res.status(404).json({result: 'Not found', message: '', data: data});
+        if(!data) return res.status(404).json({result: 'Not found', message: 'Product not found', data: data});
         
         const amount = parseFloat(priceTotal)
         const payload = generatePayload('0983187837', {amount});
@@ -37,8 +37,13 @@ exports.checkout = async (req, res, next) => {
         }
         QRCode.toDataURL(payload, option, (error, qrUrl) => {
             if (error) return res.status(400).json({result: 'Bad Request', message: 'QR generate failed', data: error})
+            req.products_data = productID
+
+            req.qrPayment = qrUrl
+
+            console.log("prod", req.products_data) //Send this
             next()
-            return res.status(200).set({'status': 'success', 'productID': productID, 'email': useremail}).json({result: 'OK', message: 'Success generate QR', data: qrUrl})
+            // return res.status(200).json({result: 'OK', message: 'Success generate QR', data: qrUrl})
         })
 
     }
@@ -48,10 +53,15 @@ exports.checkout = async (req, res, next) => {
 
 };
 
+exports.verifyPayment = async (req, res, next) => {
+    
+}
+
 exports.checkoutComplete = async (req, res, next) => {
     const useremail = req.useremail
-    const productID = req.body.productID
+    const products_data= req.products_data //To this
     
+    console.log(products_data)
     console.log(useremail)
 
     try {
@@ -61,8 +71,8 @@ exports.checkoutComplete = async (req, res, next) => {
         const user_data = await Users.findOne({'email': useremail})
         if(!user_data) return res.status(404).json({result: 'Not found', message: '', data: user_data});
 
-        const products = productID.map(item => {
-            return {product: {...item.productID}}
+        const products = products_data.map((item, index) => {
+            return {_id: item}
         })
         
         const order = await Orders.create({
@@ -74,7 +84,8 @@ exports.checkoutComplete = async (req, res, next) => {
             },
             products: products
         });
-
+        
+        console.log("Order", order)
         const data = {orderID: order._id, firstname: order.user.firstname}
         req.data = data
         next()
@@ -87,6 +98,8 @@ exports.checkoutComplete = async (req, res, next) => {
 exports.sendMail = async (req, res) => {
     const useremail = req.useremail
     const {orderID, firstname } = req.data
+
+    console.log("Order ID:", String(orderID))
 
     mailer(useremail, `Order confirmation ${String(orderID)}`, 
     `<p>Dear ${firstname},</p>
