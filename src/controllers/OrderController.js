@@ -52,6 +52,8 @@ exports.checkoutComplete = async (req, res, next) => {
     const useremail = req.useremail
     const productID = req.body.productID
     
+    console.log(useremail)
+
     try {
         const orderStatus = req.body.status
         if (!orderStatus) return res.status(404).json({ result: 'Not found', message: 'required order status', data: {}})

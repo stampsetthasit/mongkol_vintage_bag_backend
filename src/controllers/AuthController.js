@@ -114,6 +114,7 @@ exports.isAdmin = async (req, res, next) => {
     const data = await Users.findOne({'email': user});
     const roles = String(data.roles)
     if (roles != "admin") return res.status(401).json({result: 'Unauthorized', message: "You do not have the correct administrator privileges.", data: {}})
+    req.useremail = user.email;
 
     next()
   })

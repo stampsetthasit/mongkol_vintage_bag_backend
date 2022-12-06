@@ -34,7 +34,7 @@ exports.getAllProduct = async (req, res) => {
 }
 
 exports.addProduct = async (req, res) => {  
-    const useremail = req.useremail
+    const useremail = req.body.email
 
     const { error } = productValidation(req.body);
     if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data:{}});

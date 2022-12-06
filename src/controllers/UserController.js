@@ -67,7 +67,7 @@ exports.updatePoint = async (req, res) => {
 exports.addWishlistItem = async (req, res) => {
 
     const useremail = req.useremail
-    const productID = req.body.productID //.headers undefined
+    const productID = req.body.productID
 
     const { error } = wishlistValidation(req.body);
     if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data: {}});
@@ -127,7 +127,7 @@ exports.deleteWishlistItem = async (req, res) => {
 }
 
 exports.coupon = async (req, res) => {
-    const useremail = req.headers.email
+    const useremail = req.useremail
     const priceTotal = req.body.priceTotal
     const selected = req.body.coupon
 
