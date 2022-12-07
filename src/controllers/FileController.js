@@ -1,3 +1,4 @@
+const { date } = require('@hapi/joi');
 const multer = require('multer');
 const Files = require('../models/file_schema');
 
@@ -30,6 +31,8 @@ const fileFilter = (req, file, cb) => {
 }
 
 exports.uploadImage = async (req, res) => {
+    const adminemail = req.adminemail
+
     const uploadImg = multer({storage: storageImg}).array('file');
 
     uploadImg( req, res, async (err) => {
@@ -51,6 +54,8 @@ exports.uploadImage = async (req, res) => {
         const data_id = data.map(key => {
             return key._id
         });
+
+        console.log(`Uploaded file by: ${adminemail}, Time: ${Date.now()}`)
 
         return res.status(200).json({result: 'OK', message: 'success upload image', data: data_id})
     });

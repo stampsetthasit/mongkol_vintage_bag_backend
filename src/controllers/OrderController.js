@@ -15,8 +15,8 @@ exports.checkout = async (req, res, next) => {
     const status = req.body.status
 
     try {
-        const user_data = await Users.findOneAndUpdate({'email': useremail})
-        if(!user_data) return res.status(404).json({result: 'Not found', message: '', data: user_data});
+        const user_data = await Users.findOne({'email': useremail})
+        if(!user_data) return res.status(404).json({result: 'Not found', message: 'User not found', data: user_data});
 
         const address = await Users.findOne({'email': useremail})
         if(address.address.address_line1 === "") return res.status(404).json({result: 'Not found', message: 'address not found', data: address.address});

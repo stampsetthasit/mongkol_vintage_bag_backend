@@ -34,17 +34,18 @@ exports.getAllProduct = async (req, res) => {
 }
 
 exports.addProduct = async (req, res) => {  
-    const useremail = req.body.email
+    const adminemail = req.adminemail
 
     const { error } = productValidation(req.body);
     if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data:{}});
     
     try {
-        const user_data = await Users.findOne({ 'email': useremail })
-        if(!user_data) return res.status(404).json({result: 'Not found', message: '', data: {}});
+        const user_data = await Users.findOne({ 'email': adminemail })
+        if(!user_data) return res.status(404).json({result: 'Not found', message: 'User not found', data: {}});
 
         const data = await Products.create(req.body)
         
+        console.log(`Created new product by: ${data.email}, Product Name: ${req.body.title}, Time: ${Date.now()}`)
 
         res.status(200).json({result: 'OK', message: 'success create product', data: data});
 
@@ -55,6 +56,7 @@ exports.addProduct = async (req, res) => {
 
 exports.editProduct = async (req, res) => {
     const id = req.body.productID //undefined
+    const adminemail = req.adminemail
 
     const { error } = productValidation(req.body);
     if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data: {}});
@@ -79,6 +81,9 @@ exports.editProduct = async (req, res) => {
             image: data.image,
             modified: data.modified
         }
+
+        console.log(`Edited product by: ${data.email}, Product Name: ${title}, Time: ${Date.now()}`)
+
         return res.status(200).json({result: 'OK', message: 'success update address', data: schema});
     }
     catch (error) {
@@ -88,6 +93,7 @@ exports.editProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
     const id = req.body.productID // .headers undefined
+    const adminemail = req.adminemail
     
     try {
         const data = await Products.findById(id)
@@ -101,6 +107,8 @@ exports.deleteProduct = async (req, res) => {
             desc: data.desc,
             image: data.image,
         }
+
+        console.log(`Deleted product by: ${data.email}, Product Name: ${title}, Time: ${Date.now()}`)
 
         return res.status(200).json({result: 'OK', message: 'success delete product', data: {id, schema}});
     }

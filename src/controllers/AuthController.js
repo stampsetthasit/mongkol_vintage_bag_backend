@@ -22,6 +22,8 @@ exports.register = async (req, res) => {
         wishlist: data.wishlist
       }
 
+      console.log(`NewUser: ${data.email}, Time: ${Date.now()}`)
+
       return res.status(200).json({result: 'OK', message: 'Success create account', data: {userScheama}}), 
       userdata.user.updateProfile({displayName: req.body.firstname})
     })
@@ -44,6 +46,9 @@ exports.login = async (req, res) => {
       })
 
       const accessToken = userdata.user.toJSON().stsTokenManager.accessToken
+
+      console.log(`Logged in: ${data.email}, Time: ${Date.now()}`)
+
       return res.status(202).header('Authorization', `Bearer ${accessToken}`).json({result: 'Accepted', message: '', data: userdata});
     })
     .catch((error) => {
@@ -95,6 +100,7 @@ exports.resetPassword = (req, res) => {
     .auth()
     .sendPasswordResetEmail(req.body.email)
     .then(function (userdata) {
+      console.log(`Password reset email sent to: ${req.body.email}, Time: ${Date.now()}`)
       return res.status(200).json({result: 'OK', message: "Password reset email sent!", data: {userdata}});
     })
     .catch((error) => {
@@ -115,7 +121,8 @@ exports.isAdmin = async (req, res, next) => {
     const roles = String(data.roles)
     if (roles != "admin") return res.status(401).json({result: 'Unauthorized', message: "You do not have the correct administrator privileges.", data: {}})
     req.useremail = user.email;
-
+    req.adminemail = data.email
+    
     next()
   })
   .catch((error) => {
