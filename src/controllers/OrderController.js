@@ -12,6 +12,7 @@ exports.checkout = async (req, res, next) => {
     const useremail = req.useremail
     const productID = req.body.productID
     const priceTotal = req.body.priceTotal
+    const status = req.body.status
 
     try {
         const user_data = await Users.findOneAndUpdate({'email': useremail})
@@ -41,8 +42,17 @@ exports.checkout = async (req, res, next) => {
 
             req.qrPayment = qrUrl
 
-            console.log("prod", req.products_data) //Send this
-            next()
+            req.status = status
+
+            if (status == "success") {
+                next()
+            }
+            else if (status == "failure") {
+                res.status(406).json({result: 'Not Acceptable', message: 'payment failed', error: status});
+            }
+            else {
+                res.status(500).json({result: 'Internal Server Error', message: 'Something Went Wrong, Please Try Again', error: status});
+            }
             // return res.status(200).json({result: 'OK', message: 'Success generate QR', data: qrUrl})
         })
 
@@ -53,13 +63,9 @@ exports.checkout = async (req, res, next) => {
 
 };
 
-exports.verifyPayment = async (req, res, next) => {
-    
-}
-
 exports.checkoutComplete = async (req, res, next) => {
     const useremail = req.useremail
-    const products_data= req.products_data //To this
+    const products_data= req.products_data
     
     console.log(products_data)
     console.log(useremail)
