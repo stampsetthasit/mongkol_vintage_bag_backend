@@ -14,17 +14,15 @@ exports.getAllProduct = async (req, res) => {
         const data = await Products.find()
         if(!data) return res.status(404).json({result: 'Not found', message: '', data: {}});
         const product_data = []
-
-        const images = await Files.findById(data.image); //This
-
         for(let i = 0; i < data.length; i++) {
+            const images = await Files.findOne({file_name: data[i].image});
             const schema = {
                 _id: data[i]._id,
                 title: data[i].title,
                 category: data[i].category,
                 price: data[i].price,
                 desc: data[i].desc,
-                image: data[i].image = images.file_path, //This
+                image: data[i].image = `public/images/${images.file_name}`, //This
             }
             product_data.push(schema)
         }
