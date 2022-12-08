@@ -22,7 +22,7 @@ exports.getAllProduct = async (req, res) => {
                 category: data[i].category,
                 price: data[i].price,
                 desc: data[i].desc,
-                image: data[i].image = `public/images/${images.file_name}`, //This
+                image: data[i].image = `public/images/${images.file_name}`,
             }
             product_data.push(schema)
         }
@@ -46,8 +46,8 @@ exports.addProduct = async (req, res) => {
 
         const data = await Products.create(req.body)
 
-        const images = await Files.findById(data.image)//This 
-        data.image = images.file_path //This
+        const images = await Files.findOne({file_name: data.image})//This 
+        data.image = `public/images/${images.file_name}` //This
         
         console.log(`Created new product by: ${user_data.email}, Product Name: ${req.body.title}, Time: ${Date.now()}`)
 
@@ -77,8 +77,8 @@ exports.editProduct = async (req, res) => {
         data.image = image
         data.modified = Date.now()
 
-        const images = await Files.findById(data.image) //This
-        data.image = images.file_path //This
+        const images = await Files.findOne({file_name: data.image})//This 
+        data.image = `public/images/${images.file_name}`
 
         await Products.findByIdAndUpdate(id, data)
         const schema = {
