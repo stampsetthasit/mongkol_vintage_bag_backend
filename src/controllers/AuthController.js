@@ -62,7 +62,7 @@ exports.logout = async (req, res) => {
   firebase.auth().signOut().then((user) => {
     const useremail = req.useremail
     console.log(`Logged out: ${useremail}, Time: ${Date.now()}`)
-    res.status(200).json({result: 'OK', message: "Success logout", data: useremail})
+    res.status(200).header('Authorization', '').json({result: 'OK', message: "Success logout", data: useremail})
   })
   .catch((error) => {
     const errorCode = error.code;
