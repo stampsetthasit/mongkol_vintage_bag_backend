@@ -1,5 +1,6 @@
 const Users = require('../models/user_schema');
 const Products = require('../models/product_schema');
+const Files = require('../models/file_schema');
 const { productValidation } = require('../services/validation');
 
 exports.getAllProduct = async (req, res) => {
@@ -14,6 +15,8 @@ exports.getAllProduct = async (req, res) => {
         if(!data) return res.status(404).json({result: 'Not found', message: '', data: {}});
         const product_data = []
 
+        const images = await Files.findById(data.image); //This
+
         for(let i = 0; i < data.length; i++) {
             const schema = {
                 _id: data[i]._id,
@@ -21,7 +24,7 @@ exports.getAllProduct = async (req, res) => {
                 category: data[i].category,
                 price: data[i].price,
                 desc: data[i].desc,
-                image: data[i].image,
+                image: data[i].image = images.file_path, //This
             }
             product_data.push(schema)
         }
@@ -44,6 +47,9 @@ exports.addProduct = async (req, res) => {
         if(!user_data) return res.status(404).json({result: 'Not found', message: 'User not found', data: {}});
 
         const data = await Products.create(req.body)
+
+        const images = await Files.findById(data.image)//This 
+        data.image = images.file_path //This
         
         console.log(`Created new product by: ${user_data.email}, Product Name: ${req.body.title}, Time: ${Date.now()}`)
 
@@ -72,6 +78,10 @@ exports.editProduct = async (req, res) => {
         data.desc = desc
         data.image = image
         data.modified = Date.now()
+
+        const images = await Files.findById(data.image) //This
+        data.image = images.file_path //This
+
         await Products.findByIdAndUpdate(id, data)
         const schema = {
             title: data.title,
