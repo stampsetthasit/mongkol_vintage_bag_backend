@@ -45,7 +45,7 @@ exports.addProduct = async (req, res) => {
 
         const data = await Products.create(req.body)
         
-        console.log(`Created new product by: ${data.email}, Product Name: ${req.body.title}, Time: ${Date.now()}`)
+        console.log(`Created new product by: ${user_data.email}, Product Name: ${req.body.title}, Time: ${Date.now()}`)
 
         res.status(200).json({result: 'OK', message: 'success create product', data: data});
 
