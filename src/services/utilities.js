@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-const pointCal = (priceTotal) => {
+const pointCal = (priceTotal) => { //calculate point from price you buy
     let total = priceTotal;
     var point = 0
     point = 0
@@ -22,7 +22,7 @@ const pointCal = (priceTotal) => {
 
 };
 
-const couponDis = (point, priceTotal, couponSelected) => {
+const couponDis = (point, priceTotal, couponSelected) => { //calculate coupon discount
     const userPoint = point;
     const total = priceTotal;
 
@@ -58,7 +58,7 @@ const couponDis = (point, priceTotal, couponSelected) => {
     }
 }
 
-const mailer = (to, subject, html) => {
+const mailer = (to, subject, html) => { //send mail
     let transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,

@@ -1,20 +1,20 @@
 const Users = require('../models/user_schema');
 const Products = require('../models/product_schema');
 const firebase = require('../firebase');
-const { addressValidation, wishlistValidation } = require('../services/validation');
+const { addressValidation, wishlistValidation, contactUsValidation } = require('../services/validation');
 const { pointCal, couponDis, mailer } = require('../services/utilities')
 
 exports.updateAddress = async (req, res) => {
-    const { error } = addressValidation(req.body);
+    const { error } = addressValidation(req.body); // validation
     if (error) return res.status(200).json({result: 'OK', message: error.details[0].message, data: {}});
 
     const useremail = req.useremail
 
     try {
-        const data = await Users.findOne({'email': useremail })
+        const data = await Users.findOne({'email': useremail }) //find user email
         if(!data) return res.status(404).json({result: 'Not found', message: 'User not found', data: data});
 
-        const { address_line1, address_line2, city, province, zip, mobile} = req.body
+        const { address_line1, address_line2, city, province, zip, mobile} = req.body 
         data.address.address_line1 = address_line1
         data.address.address_line2 = address_line2
         data.address.city = city
@@ -22,7 +22,7 @@ exports.updateAddress = async (req, res) => {
         data.address.zip = zip
         data.address.mobile = mobile
         data.modified = Date.now()
-        await Users.findOneAndUpdate({'email': useremail}, data)
+        await Users.findOneAndUpdate({'email': useremail}, data) //update address from body
         const schema = {
             email: data.email,
             address: data.address,
@@ -49,10 +49,10 @@ exports.updatePoint = async (req, res) => {
         if(!data) return res.status(404).json({result: 'Not found', message: 'User not found', data: data});
 
 
-        data.point += Number(point)
+        data.point += Number(point) //calculate point
         data.modified = Date.now()
 
-        await Users.findOneAndUpdate({'email': useremail }, data)
+        await Users.findOneAndUpdate({'email': useremail }, data) //update point
         const schema = {
             email: data.email,
             point: data.point,
@@ -169,22 +169,21 @@ exports.coupon = async (req, res) => {
 }
 
 exports.contactus = async (req, res) => {
-    const userEmail = req.body.email
-    const userName = req.body.name
-    const userMsg = req.body.msg
+    const { error } = contactUsValidation(req.body);
+    if (error) return res.status(200).json({result: 'OK', message: error.details[0].message, data: {}});
 
     try {
 
-        mailer('mongkolteam.info@gmail.com', `Contact us from ${userEmail}`, `<h5>Name: ${userName} <br> Email: ${userEmail} <br></h5><p>Message: ${userMsg}</p>`);
+        mailer('mongkolteam.info@gmail.com', `Contact us from ${req.body.email}`, `<h5>Name: ${req.body.name} <br> Email: ${req.body.email} <br></h5><p>Message: ${req.body.msg}</p>`);
 
         firebase.firestore().collection("contact-us").add({
-            name: userName,
-            email: userEmail,
-            message: userMsg,
+            name: req.body.name,
+            email: req.body.email,
+            message: req.body.msg,
             created_at: firebase.firestore.FieldValue.serverTimestamp()
         })
 
-        console.log(`Sent Question by: ${userEmail}, Time: ${Date.now()}`)
+        console.log(`Sent Question by: ${req.body.email}, Time: ${Date.now()}`)
 
         res.status(200).json({result: 'OK', message: 'Success send contact us', data: {}});
     }

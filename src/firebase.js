@@ -1,3 +1,6 @@
+// Connect to Firebase and Firestore
+// https://firebase.google.com/docs/web/setup
+
 const firebase = require("firebase/app");
 require("firebase/auth");
 require("firebase/firestore");
@@ -20,7 +23,7 @@ firebase.initializeApp(firebaseConfig);
 
 const mongkolFirebaseAdminApp = initializeApp(firebaseConfig)
 const mongkolGetAuth = getAuth(mongkolFirebaseAdminApp);
-global.mongkolGetAuth = mongkolGetAuth;
+global.mongkolGetAuth = mongkolGetAuth; //Global for other files to use this method
 
 
 module.exports = firebase;

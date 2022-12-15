@@ -1,15 +1,15 @@
 const { date } = require('@hapi/joi');
-const multer = require('multer');
+const multer = require('multer'); //middleware access file
 const Files = require('../models/file_schema');
 
 const currentTime = Date.now();
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (req, file, cb) => { //set path
         cb(null, 'public')
     },
     filename: (req, file, cb) => {
-        cb(null, currentTime + '-' + file.originalname)
+        cb(null, currentTime + '-' + file.originalname) //set filename and time
     }
 });
 
@@ -23,7 +23,7 @@ const storageImg = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') { //filter only jpeg png and jpg files
         cb(null, true)
     } else {
         cb({message: 'Unsupported file format'}, false)
@@ -31,7 +31,7 @@ const fileFilter = (req, file, cb) => {
 }
 
 exports.uploadImage = async (req, res) => {
-    const adminemail = req.adminemail
+    const adminemail = req.adminemail //only admin can upload
 
     const uploadImg = multer({storage: storageImg}).array('file');
 
@@ -41,7 +41,7 @@ exports.uploadImage = async (req, res) => {
         }
 
         const file_arr = []
-        for(let i = 0 ; i < req.files.length ; i++){
+        for(let i = 0 ; i < req.files.length ; i++){ //loop files and append to array
             const file_data = {
                 file_name: req.files[i].originalname,
                 filename_extension: req.files[i].mimetype,
@@ -50,7 +50,7 @@ exports.uploadImage = async (req, res) => {
             file_arr.push(file_data)
         }
 
-        const data = await Files.create(file_arr)
+        const data = await Files.create(file_arr) //create db and save path in db
         const data_id = data.map(key => {
             return key._id
         });

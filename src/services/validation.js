@@ -62,83 +62,9 @@ const wishlistValidation = (data) => {
   return schema.validate(data);
 };
 
-
-
-
-// const loginValidation = (data) => {
-//   const schema = Joi.object({
-//     email: Joi.string().email().required(),
-//     password: Joi.string().min(6).required(),
-//   });
-//   return schema.validate(data);
-// };
-
-// const forgetPassValidation = (data) => {
-//   const schema = Joi.object({
-//     email: Joi.string().min(6).required()
-//   });
-//   return schema.validate(data);
-// };
-
-// const transactionValidation = (data) => {
-//   const schema = Joi.object({
-//     title: Joi.string().required(),
-//     detail: Joi.string().required(),
-//     type: Joi.string().required(),
-//     reward: Joi.string().allow("").required(),
-//     petitioner_id: Joi.string().required(),
-//     applicant_id: Joi.string().allow("").required(),
-//     conversation_id: Joi.string().allow("").required(),
-//     location: {
-//       room: Joi.string().required(),
-//       floor: Joi.string().required(),
-//       building: Joi.string().required(),
-//       optional: Joi.string().allow("").required(),
-//       latitude: Joi.number().required(),
-//       longitude: Joi.number().required(),
-//     },
-//     task_location: {
-//       name: Joi.string().required(),
-//       building: Joi.string().required(),
-//       latitude: Joi.number().required(),
-//       longitude: Joi.number().required(),
-//     },
-//   });
-//   return schema.validate(data);
-// };
-
-// const transactionStateChangeValidation = (data) => {
-//   const schema = Joi.object({
-//     transaction_id: Joi.string().required(),
-//   });
-//   return schema.validate(data);
-// };
-
-// const transactionReportValidation = (data) => {
-//   const schema = Joi.object({
-//     transaction_id: Joi.string().required(),
-//     detail: Joi.string().required(),
-//   });
-//   return schema.validate(data);
-// };
-
-// const appReportValidation = (data) => {
-//   const schema = Joi.object({
-//     email: Joi.string().required(),
-//     detail: Joi.string().required(),
-//   });
-//   return schema.validate(data);
-// };
-
 module.exports.registerValidation = registerValidation;
 module.exports.addressValidation = addressValidation;
 module.exports.productValidation = productValidation;
 module.exports.changePwdValidation = changePwdValidation;
 module.exports.wishlistValidation = wishlistValidation;
-// module.exports.forgetPassValidation = forgetPassValidation;
-// module.exports.verifyValidation = verifyValidation;
-// module.exports.transactionValidation = transactionValidation;
-// module.exports.transactionStateChangeValidation =
-//   transactionStateChangeValidation;
-// module.exports.transactionReportValidation = transactionReportValidation;
-// module.exports.appReportValidation = appReportValidation;
+module.exports.contactUsValidation = contactUsValidation;

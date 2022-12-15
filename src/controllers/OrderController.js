@@ -28,9 +28,9 @@ exports.checkout = async (req, res, next) => {
         const data = await Products.findById(productID)
         if(!data) return res.status(404).json({result: 'Not found', message: 'Product not found', data: data});
         
-        const amount = parseFloat(priceTotal)
-        const payload = generatePayload('0983187837', {amount});
-        const option = {
+        const amount = parseFloat(priceTotal) //parse float from front price
+        const payload = generatePayload('0983187837', {amount}); //generate QR promtpay
+        const option = { //set qr color
             color: {
                 dark: '#000',
                 light: '#fff'
@@ -40,9 +40,9 @@ exports.checkout = async (req, res, next) => {
             if (error) return res.status(400).json({result: 'Bad Request', message: 'QR generate failed', data: error})
             req.products_data = productID
 
-            req.qrPayment = qrUrl
+            req.qrPayment = qrUrl // QRCode
 
-            req.status = status
+            req.status = status // cannot use auto verify qr because we need verify from bank api
 
             if (status == "success") {
                 next()
@@ -53,7 +53,6 @@ exports.checkout = async (req, res, next) => {
             else {
                 res.status(500).json({result: 'Internal Server Error', message: 'Something Went Wrong, Please Try Again', error: status});
             }
-            // return res.status(200).json({result: 'OK', message: 'Success generate QR', data: qrUrl})
         })
 
     }
@@ -66,9 +65,6 @@ exports.checkout = async (req, res, next) => {
 exports.checkoutComplete = async (req, res, next) => {
     const useremail = req.useremail
     const products_data= req.products_data
-    
-    console.log(products_data)
-    console.log(useremail)
 
     try {
         const orderStatus = req.body.status
@@ -81,7 +77,7 @@ exports.checkoutComplete = async (req, res, next) => {
             return {_id: item}
         })
         
-        const order = await Orders.create({
+        const order = await Orders.create({ //create order to DB
             user: {
                 email: user_data.email,
                 firstname: user_data.firstname,
@@ -91,9 +87,9 @@ exports.checkoutComplete = async (req, res, next) => {
             products: products
         });
         
-        console.log("Order", order)
+        console.log("Order: ", order)
         const data = {orderID: order._id, firstname: order.user.firstname}
-        req.data = data
+        req.data = data //req this data for send mail
         next()
     }
     catch (error) {
@@ -107,7 +103,7 @@ exports.sendMail = async (req, res) => {
 
     console.log("Order ID:", String(orderID))
 
-    mailer(useremail, `Order confirmation ${String(orderID)}`, 
+    mailer(useremail, `Order confirmation ${String(orderID)}`,  //send mail
     `<p>Dear ${firstname},</p>
     <br>
     <p>Thank you so much for order with Mongkol!</p>
@@ -120,7 +116,7 @@ exports.sendMail = async (req, res) => {
     <p>Mongkol</p>
     `)
 
-    firebase.firestore().collection("mail").doc(String(orderID)).set({
+    firebase.firestore().collection("mail").doc(String(orderID)).set({ //create mail collection in firestore
         to: useremail,
         message: {
             subject: `Order confirmation #${String(orderID)}`,
@@ -141,14 +137,3 @@ exports.sendMail = async (req, res) => {
     })
     res.status(200).json({result: 'OK', message: 'payment complete and also send email', data: {}});
 }
-
-// Dear sam,
-
-// Thank you so much for order with Mongkol!
-
-// Your order is being prepared and packed with loving care. By the way, you have great taste.
-
-// Let us know if we can do anything to make your experience better!
-
-// Thanks again,
-// Mongkol

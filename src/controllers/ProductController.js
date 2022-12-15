@@ -13,8 +13,9 @@ exports.getAllProduct = async (req, res) => {
 
         const data = await Products.find()
         if(!data) return res.status(404).json({result: 'Not found', message: '', data: {}});
+
         const product_data = []
-        for(let i = 0; i < data.length; i++) {
+        for(let i = 0; i < data.length; i++) { //loop product data from DB and append to array
             const images = await Files.findOne({file_name: data[i].image});
             const schema = {
                 _id: data[i]._id,
@@ -27,7 +28,7 @@ exports.getAllProduct = async (req, res) => {
             product_data.push(schema)
         }
 
-        res.status(200).json({result: 'OK', message: 'success get all product', data: product_data});
+        res.status(200).json({result: 'OK', message: 'success get all product', data: product_data}); //send product to front
     }
     catch (error) {
         res.status(500).json({result: 'Internal Server Error', message: '', error: error});
@@ -35,9 +36,9 @@ exports.getAllProduct = async (req, res) => {
 }
 
 exports.addProduct = async (req, res) => {  
-    const adminemail = req.adminemail
+    const adminemail = req.adminemail //Only admin can add Product
 
-    const { error } = productValidation(req.body);
+    const { error } = productValidation(req.body); //Validation
     if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data:{}});
     
     try {
@@ -46,8 +47,8 @@ exports.addProduct = async (req, res) => {
 
         const data = await Products.create(req.body)
 
-        const images = await Files.findOne({file_name: data.image})//This 
-        data.image = `public/images/${images.file_name}` //This
+        const images = await Files.findOne({file_name: data.image})
+        data.image = `public/images/${images.file_name}`
         
         console.log(`Created new product by: ${user_data.email}, Product Name: ${req.body.title}, Time: ${Date.now()}`)
 
@@ -59,10 +60,10 @@ exports.addProduct = async (req, res) => {
 }
 
 exports.editProduct = async (req, res) => {
-    const id = req.body.productID //undefined
+    const id = req.body.productID
     const adminemail = req.adminemail
 
-    const { error } = productValidation(req.body);
+    const { error } = productValidation(req.body); //Validation
     if (error) return res.status(200).json({result:'OK',masage:error.details[0].message, data: {}});
 
     try {
@@ -80,7 +81,7 @@ exports.editProduct = async (req, res) => {
         const images = await Files.findOne({file_name: data.image})//This 
         data.image = `public/images/${images.file_name}`
 
-        await Products.findByIdAndUpdate(id, data)
+        await Products.findByIdAndUpdate(id, data) // find one and update find by ID
         const schema = {
             title: data.title,
             category: data.category,
@@ -100,11 +101,11 @@ exports.editProduct = async (req, res) => {
 }
 
 exports.deleteProduct = async (req, res) => {
-    const id = req.body.productID // .headers undefined
+    const id = req.body.productID
     const adminemail = req.adminemail
     
     try {
-        const data = await Products.findById(id)
+        const data = await Products.findById(id) //find by ID and delete
         if(!data) return res.status(404).json({result: 'Not found', message: '', data: data});
 
         await Products.findByIdAndDelete(id, data)
